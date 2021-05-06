@@ -98,6 +98,9 @@ export class AppState {
   @observable public isEnablingElectronLogging = !!this.retrieve(
     'isEnablingElectronLogging',
   );
+  @observable public isEnablingNodeDebug = !!this.retrieve(
+    'isEnablingNodeDebug',
+  );
   @observable public isClearingConsoleOnRun = !!this.retrieve(
     'isClearingConsoleOnRun',
   );
@@ -234,6 +237,7 @@ export class AppState {
     autorun(() =>
       this.save('isEnablingElectronLogging', this.isEnablingElectronLogging),
     );
+    autorun(() => this.save('isEnablingNodeDebug', this.isEnablingNodeDebug));
     autorun(() => this.save('executionFlags', this.executionFlags));
     autorun(() => this.save('version', this.version));
     autorun(() => this.save('channelsToShow', this.channelsToShow));

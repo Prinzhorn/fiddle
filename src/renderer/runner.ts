@@ -327,6 +327,7 @@ export class Runner {
     const {
       currentElectronVersion,
       isEnablingElectronLogging,
+      isEnablingNodeDebug,
       flushOutput,
       pushOutput,
       executionFlags,
@@ -346,6 +347,12 @@ export class Runner {
       delete env.ELECTRON_ENABLE_LOGGING;
       delete env.ELECTRON_DEBUG_NOTIFICATIONS;
       delete env.ELECTRON_ENABLE_STACK_DUMPING;
+    }
+
+    if (isEnablingNodeDebug) {
+      env.NODE_DEBUG = '*';
+    } else {
+      delete env.NODE_DEBUG;
     }
 
     // Add user-specified environment variables if any have been set.

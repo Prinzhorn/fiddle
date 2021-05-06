@@ -104,6 +104,30 @@ describe('Runner component', () => {
       expect(installModules).toHaveBeenCalled();
     });
 
+    it('runs with node logging when enabled', async () => {
+      store.isEnablingNodeDebug = true;
+      (findModulesInEditors as any).mockReturnValueOnce(['fake-module']);
+      (spawn as jest.Mock).mockImplementationOnce((_, __, opts) => {
+        expect(opts.env).toHaveProperty('NODE_DEBUG');
+        return mockChild;
+      });
+
+      // wait for run() to get running
+      const runPromise = instance.run();
+      await waitFor(() => store.isRunning);
+      expect(store.isRunning).toBe(true);
+
+      // child process exits with success
+      setTimeout(() => mockChild.emit('close', 0));
+      const result = await runPromise;
+
+      expect(result).toBe(RunResult.SUCCESS);
+      expect(store.isRunning).toBe(false);
+      expect(getIsDownloaded).toHaveBeenCalled();
+      expect(fileManager.saveToTemp).toHaveBeenCalled();
+      expect(installModules).toHaveBeenCalled();
+    });
+
     it('emits output with exitCode', async () => {
       (findModulesInEditors as any).mockReturnValueOnce(['fake-module']);
       (spawn as any).mockReturnValueOnce(mockChild);

@@ -60,6 +60,7 @@ export class ExecutionSettings extends React.Component<
     this.handleElectronLoggingChange = this.handleElectronLoggingChange.bind(
       this,
     );
+    this.handleNodeDebugChange = this.handleNodeDebugChange.bind(this);
 
     this.handleSettingsItemChange = this.handleSettingsItemChange.bind(this);
     this.addNewSettingsItem = this.addNewSettingsItem.bind(this);
@@ -105,6 +106,16 @@ export class ExecutionSettings extends React.Component<
   public handleElectronLoggingChange(event: React.FormEvent<HTMLInputElement>) {
     const { checked } = event.currentTarget;
     this.props.appState.isEnablingElectronLogging = checked;
+  }
+
+  /**
+   * Handles a change on whether or not node should log everything
+   *
+   * @param {React.ChangeEvent<HTMLInputElement>} event
+   */
+  public handleNodeDebugChange(event: React.FormEvent<HTMLInputElement>) {
+    const { checked } = event.currentTarget;
+    this.props.appState.isEnablingNodeDebug = checked;
   }
 
   /**
@@ -256,6 +267,7 @@ export class ExecutionSettings extends React.Component<
     const {
       isKeepingUserDataDirs,
       isEnablingElectronLogging,
+      isEnablingNodeDebug,
     } = this.props.appState;
 
     return (
@@ -302,6 +314,20 @@ export class ExecutionSettings extends React.Component<
               checked={isEnablingElectronLogging}
               label="Enable advanced Electron logging."
               onChange={this.handleElectronLoggingChange}
+            />
+          </FormGroup>
+        </Callout>
+        <br />
+        <Callout>
+          <FormGroup>
+            <p>
+              This will set the <code>NODE_DEBUG=*</code> environment variable
+              for extra verbose logging.
+            </p>
+            <Checkbox
+              checked={isEnablingNodeDebug}
+              label="Enable verbose Node.js logging."
+              onChange={this.handleNodeDebugChange}
             />
           </FormGroup>
         </Callout>

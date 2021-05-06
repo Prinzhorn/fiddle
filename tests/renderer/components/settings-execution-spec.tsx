@@ -57,6 +57,24 @@ describe('ExecutionSettings component', () => {
     });
   });
 
+  describe('handleNodeDebugChange()', () => {
+    it('handles a new selection', async () => {
+      const wrapper = shallow(<ExecutionSettings appState={store} />);
+      const instance = wrapper.instance() as any;
+      await instance.handleNodeDebugChange({
+        currentTarget: { checked: false },
+      });
+
+      expect(store.isEnablingNodeDebug).toBe(false);
+
+      await instance.handleNodeDebugChange({
+        currentTarget: { checked: true },
+      });
+
+      expect(store.isEnablingNodeDebug).toBe(true);
+    });
+  });
+
   describe('handleItemSettingsChange()', () => {
     describe('with executionFlags', () => {
       it('updates when new flags are added', async () => {
